@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="../static/css/common.css">
+    <style>
+        #main {
+            width: 96%;
+            max-width: 320px;
+        }
+
+        #navigation {
+            position: fixed;
+            bottom: 0;
+            height: 60px;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -1px 8px #eee;
+            justify-content: space-around;
+            text-align: center;
+            margin: 0;
+            font-size: 0;
+        }
+
+        .borrow {
+            width: 33%;
+            display: inline-block;
+            height: 100%;
+        }
+
+        .order {
+            width: 33%;
+            display: inline-block;
+            height: 100%;
+        }
+
+        .bottomicon {
+            height: 50%;
+            width: auto;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: -2px;
+            position: relative;
+        }
+
+        .bottomicon img{
+            height: 85%;
+            width: 25px;
+            position: absolute;
+            top: 0;
+            margin: 0 auto;
+            left:0;
+            right:0;
+        }
+
+        #navigation > div.active .bottomtext {
+            color: rgb(80, 181, 237);
+        }
+
+        .bottomtext {
+            font-size: 14px;
+            margin: 0 0 3px 0;
+        }
+
+        .read {
+            width: 33%;
+            display: inline-block;
+            height: 100%;
+        }
+
+        .card {
+            width: 100%;
+            height: 90px;
+            transition: height 0.2s;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 3px 3px #eee;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .firstline {
+            margin-left: 15px;
+            margin-right: 8px;
+            margin-top: 8px;
+            margin-bottom: -4px;
+            padding-top: 5px;
+            height: 25px;
+        }
+
+        .author {
+            font-size: 13px;
+            float: left;
+        }
+
+        .ddl {
+            font-size: 13px;
+            float: right;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-left: 15px;
+            margin-right: 50px;
+        }
+
+        .time {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+
+        }
+
+        .infor {
+            font-size: 14px;
+            float: left;
+            margin-left: 16px;
+            width: 100%;
+            display: none;
+
+        }
+
+        .time_renew {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            margin-right: 5px;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .buttoninfo {
+            width: 26%;
+            min-width: 40px;
+            height: 20px;
+            background-color: white;
+            color: rgb(80, 181, 237);
+            margin-left: 16px;
+            margin-top: 6px;
+            border-radius: 10px;
+            font-size: 17px;
+            padding-bottom: 2px;
+            display: none;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .buttonrenew {
+            width: 26%;
+            min-width: 40px;
+            height: 20px;
+            background-color: white;
+            margin-left: 16px;
+            margin-top: 10px;
+            border-radius: 10px;
+            font-size: 17px;
+            padding-bottom: 2px;
+            display: none;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .big {
+            height: 140px;
+        }
+
+        .littlebig {
+            height: 103px;
+        }
+
+        .bigline {
+            display: inline-block;
+        }
+
+        svg path,
+        svg rect {
+            fill: rgb(80, 181, 237);
+        }
+
+        .loader {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        svg {
+            margin: auto;
+        }
+
+
+        #search{
+            z-index: 999;
+            position: fixed;
+            background-image: linear-gradient(120deg, #96deda 0%, #50c9c3 100%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            bottom: 95px;
+            right: 26px;
+        }
+        #search img{
+            width: 50%;
+            margin: auto;
+        }
+
+        a:link,a:visited,a:active{
+            text-decoration: none;
+            outline: none;
+        }
+
+        body::-webkit-scrollbar {display:none}
+
+    </style>
+</head>
+<body>
+
+<div class="loader loader--style3">
+    <svg
+            width="40px" height="40px"
+            viewBox="0 0 50 50"
+    >
+        <path fill="#000"
+              d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+            <animateTransform attributeType="xml"
+                              attributeName="transform"
+                              type="rotate"
+                              from="0 25 25"
+                              to="360 25 25"
+                              dur="0.8s"
+                              repeatCount="indefinite"/>
+        </path>
+    </svg>
+</div>
+
+
+<div id="main" class="abs_center"></div>
+<a id="search" href="./search.html">
+    <img src="../static/img/search_white.png" />
+</a>
+<div id="navigation">
+    <div class="borrow">
+        <div class="bottomicon">
+            <img src="../static/img/borrow_blue.png">
+            <img src="../static/img/borrow_grey.png">
+        </div>
+        <p class="bottomtext">借阅</p>
+    </div>
+    <div class="order">
+        <div class="bottomicon">
+            <img src="../static/img/order_blue.png">
+            <img src="../static/img/order_grey.png">
+        </div>
+        <p class="bottomtext">预约</p>
+    </div>
+    <div class="read">
+        <div class="bottomicon">
+            <img src="../static/img/read_blue.png">
+            <img src="../static/img/read_grey.png">
+        </div>
+        <p class="bottomtext">我看过的</p>
+    </div>
+</div>
+
+<script type="application/xml" id="book_code">
+    <div class="card _color">
+        <div class="firstline" id="firstline">
+            <div class="author">_author</div>
+            <div class="ddl" flag="_na">_ddl</div>
+        </div>
+        <div class="name">_name</div>
+        <div class="infor">_position</div>
+        <div class="infor">_publisher</div>
+        <a class="buttoninfo _hideInfo" href="./details.html?id=_bookID">详情
+            <div>_bookID</div>
+        </a>
+
+        <div class="buttonrenew _hideRenew _textcolor">续借
+            <div class="buttoninfo">_entityID</div>
+        </div>
+        <div class="time">_time</div>
+    </div>
+</script>
+
+<script type="application/xml" id="ddl">
+    <div class="ddl">_ddl</div>
+</script>
+
+<script type="text/javascript">
+
+    // function setTimeout() {
+
+    //}
+
+    function replaceAll(str, obj) {
+        var res = str;
+        for (var e in obj) {
+            res = res.replace(e, obj[e]);
+        }
+        return res;
+    }
+
+
+    $(document).ready(function () {
+        $(".borrow").click();
+        $(".bottomicon img:nth-child(1)").hide();
+        $("#navigation>div").on("click", function () {
+            if (!$(this).hasClass("active")) {
+                $(".bottomicon img:nth-child(1)").hide();
+                $(".bottomicon img:nth-child(2)").show();
+                $("#navigation>div").removeClass("active");
+                $(this).addClass("active");
+                $(this).find("img:nth-child(2)").hide();
+                $(this).find("img:nth-child(1)").show();
+            }
+        });
+        var book_code = $("#book_code").text();
+        var ddl = $("#ddl").text();
+        $.ajax({
+            url: "http://wx.hduin.club/api/token/auth",
+            method: "post",
+            data: {
+                openID: "o6BVNt7owE4AyBFa4tKJNsUkRK8E"
+            },
+            timeout: 4000,
+            success: function (data) {
+                var token = data.data.token;
+                localStorage.setItem("TOKEN", token);
+                //console.log(token);
+                $.ajax({
+                    url: "http://wx.hduin.club/api/resource/library/staff/person_center",
+                    method: "get",
+                    headers: {Authorization: "Bearer " + token},
+                    success: function (data) {
+                        var now_list = data.data.lend_mine.now;
+                        var nowlist = JSON.stringify(now_list);
+                        localStorage.setItem("NOW_LIST", nowlist);
+                        var history_list = data.data.lend_mine.history;
+                        var historylist = JSON.stringify(history_list);
+                        localStorage.setItem("HISTORY_LIST", historylist);
+                        if (!now_list) return;
+
+                        /*now_list.forEach(function (book) {
+                            $("#main").append(replaceAll(book_code, {
+                                "_name": book.name,
+                                "_na": book.name,
+                                "_ddl": book.date_deadline,
+                                "_author": book.author,
+                                "_time": book.date_surplus + "天",
+                                "_position": book.position,
+                                "_publisher": book.publisher,
+                                "_bookID": book.bookID,
+                                "_entityID": book.id_entity,
+                                "_hideInfo": "hide"
+                            }));
+
+
+                            $("#main").on("click", ".card", function () {
+                                var $this = $(this);
+                                $(".buttonrenew").hide();
+                                $(".littlebig").removeClass("littlebig");
+                                $(".bigline").removeClass("bigline");
+                                $(this).addClass("littlebig");
+                                $(this).children(".buttonrenew").show();
+                            });
+                        })*/
+                    },
+                    complete: function () {
+                        $(".loader").remove();
+                        $(".borrow").click();
+                    },
+                    error: function(request){
+                        //console.log(request);
+                        $(".loader").remove();
+                        alert("服务器超时");
+                    }
+
+                })
+            },
+            error:function (request) {
+                //console.log(request);
+                $(".loader").remove();
+                alert("服务器超时");
+
+            }
+
+        });
+
+        $.ajax({
+            method:"post",
+            url:"http://wx.hduin.club/api/token/auth",
+            data:{
+                openID:"o6BVNt7owE4AyBFa4tKJNsUkRK8E"
+            },
+            timeout:4000,
+            success:function (data) {
+                token = data.data.token;
+                $.ajax({
+                    url:"http://wx.hduin.club/api/resource/library/book/rank",
+                    method:"get",
+                    headers:{                                                                    //存储本周热门到本地存储
+                        Authorization:"Bearer "+token
+                    },
+                    timeout:4000,
+                    success:function (headers) {
+
+                        for(var i=0;i<10;i++){
+                            localStorage.setItem('hotbook'+i, JSON.stringify(headers.data[i].name));
+                        }
+
+                    },
+                    error:function(err){
+                        // document.write("出错了！")
+                    }
+
+                })
+            },
+            error:function (err) {
+                // document.write("出错了！")
+            }
+        });
+
+        $(".borrow").click(function () {
+            $("#main").empty();
+            $("#main").hide();
+            var nowlist = localStorage.getItem("NOW_LIST");
+            var now_list = JSON.parse(nowlist);
+            if (!now_list) return;
+            //console.log(now_list);
+            now_list.forEach(function (book) {
+                var a=123;
+                book.date_surplus=a;
+                //console.log(book.id_entity);
+                $("#main").append(replaceAll(book_code, {
+                    "_color":book.date_surplus<10?(book.date_surplus<3?"RH-bk-red":"RH-bk-yellow"):"RH-bk-blue",
+                    "_textcolor":book.date_surplus<10?(book.date_surplus<3?"red":"yellow"):"blue",
+                    "_name": book.name,
+                    "_na": book.name,
+                    "_ddl": book.date_deadline,
+                    "_author": book.author,
+                    "_time": "剩余 "+book.date_surplus + "天",
+                    "_entityID": book.id_entity,
+                    "_hideInfo": "hide"
+                }));
+            });
+            $("#main").fadeIn(400);
+            $("#main").on("click", ".card", function () {
+                $(".buttonrenew").hide();
+                $(".littlebig").removeClass("littlebig");
+                $(".bigline").removeClass("bigline");
+                $(this).addClass("littlebig");
+                $(this).children(".buttonrenew").show();
+
+            });
+
+        });
+
+        $(".read").click(function () {
+            $("#main").empty();
+            $("#main").hide();
+            var historylist = localStorage.getItem("HISTORY_LIST");
+            var history_list = JSON.parse(historylist);
+            if (!history_list) return;
+            //console.log(history_list);
+            history_list.forEach(function (book) {
+                $("#main").append(replaceAll(book_code, {
+                    "_name": book.name,
+                    "_na": book.name,
+                    "_ddl": book.date_lend,
+                    "_author": book.author,
+                    "_color":"RH-bk-blue",
+                    "_time": "",
+                    "_position": book.position,
+                    "_publisher": book.publisher,
+                    "_bookID": book.id_book,
+                    "_hideRenew": "hide"
+                }));
+            })
+            $("#main").fadeIn(400);
+            $("#main").on("click", ".card", function () {
+                $(".littlebig").removeClass("littlebig");
+                $(".big").removeClass("big");
+                $(".info").removeClass("bigline");
+                $(this).addClass("big");
+                $(this).children('.infor').addClass("bigline");
+                $(this).children(".buttoninfo").addClass("bigline");
+            });
+        })
+
+        $(".order").click(function () {
+            $("#main").empty();
+        })
+
+        $("#main").on("click", ".buttonrenew", function () {
+            var $this = $(this);
+            var entity_id = $this.find("div").text();
+            //console.log(entity_id);
+            //console.log(token);
+            var token = localStorage.getItem("TOKEN");
+            $.ajax({
+                url: "http://wx.hduin.club/api/resource/library/staff/renew",
+                method: "post",
+                headers: {Authorization: "Bearer " + token},
+                data: {
+                    entityID:entity_id
+                },
+                success: function (data) {
+                    var a = data.data;
+                    alert(a.result);
+                },
+            })
+        })
+
+
+
+    });
+</script>
+</body>
+</html>

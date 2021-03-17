@@ -1,0 +1,39 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.abs_center{
+    margin: auto;
+    position: absolute;
+    left:0;
+    right: 0;
+    top:0;
+    bottom: 0;
+}
+
+.RH-bk-blue{
+    background-color: rgb(80,181,237);
+}
+.blue{
+    color: rgb(80,181,237);
+}
+
+.RH-bk-yellow{
+    background-color:#fda085;
+}
+.yellow{
+    color:#fda085;
+}
+
+.RH-bk-red{
+    background-image: linear-gradient(to right,rgb(255,109,119),rgb(250,87,98));
+}
+.red{
+    color: rgb(255,109,119);
+}
+
+.RH-bk-grey{
+    background-color: rgb(240,240,240);
+}

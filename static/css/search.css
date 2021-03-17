@@ -1,0 +1,313 @@
+/**{*/
+    /*white-space: nowrap;*/
+/*}*/
+html body{
+    margin: 0;
+    width:100%;
+    height: 100%;
+    /* background-color: rgb(238, 238, 238); */
+}
+html{
+    height: 100%;
+}
+#topbluearea{
+    width: 100%;
+    display: inline-block;
+}
+#topcontainer{
+    max-width: 340px;
+    min-width: 300px;
+    margin-left:auto;
+    margin-right: auto;
+    height: 100%;
+}
+#backbutton,#inputframe{
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+#backbutton{
+    width:8%;
+}
+#inputframe{
+    background-color: white;
+    /*width: 290px;*/
+    /*margin-left: 10px;*/
+    height: 40px;
+    width: 88%;
+}
+#backbutton img{
+    /*width: 20px;*/
+    height: 20px;
+    margin-top: 18px;
+    /*margin-left: 8px;*/
+}
+#inputframe img{
+    width: 26px;
+    height: 26px;
+    margin-left: 10px;
+    margin-top: 6px;
+    float: left;
+}
+#inputframe input{
+    outline: none;
+    margin-left: 20px;
+    height: 25px;
+    margin-top: 7px;
+    width: 225px;
+    float: left;
+    border: 0;
+    font-size: 15px;
+    color:rgb(157, 157, 157);
+    outline:none;
+
+}
+#topbluearea{
+    background-color: rgb(70, 175, 233);
+    height: 55px;
+    width: 100%;
+}
+#middlewhitearea{
+    background-color: white;
+    height: 242px;
+    box-shadow: 1px 1px 5px grey;
+}
+#middlecontainer{
+    padding-top: 20px;
+    max-width: 340px;
+    min-width: 300px;
+
+    margin-left:auto;
+    margin-right: auto;
+}
+
+#firelogo,#firelogo img{
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    position: relative;
+    bottom: 1px;
+}
+#weekhot{
+    display: inline-block;
+    /*font-size: 16px;*/
+    color: rgb(154, 154, 154);
+    position: relative;
+    bottom: 6px;
+    margin-left: 8px;
+    font-size: 15px;
+}
+#topline{
+    background-color: rgb(210, 210, 210);
+    width: 100%;
+    height: 1px;
+}
+.number{
+    display: inline-block;
+
+    color: rgb(154, 154, 154);
+}
+.book{
+    font-size: 13.5px;
+    color: rgb(64, 64, 64);
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    margin-top: 7px;
+}
+#leftpage{
+    display: inline-block;
+    width: 170px;
+    margin-left: 12px;
+
+}
+
+#rightpage{
+    width: 150px;
+    display: inline-block;
+}
+#bottomwhitearea{
+    background-color: white;
+    margin-top: 15px;
+    /* height: 470px; */
+    /* box-shadow: 10px 10px 5px black; */
+}
+#bottomcontainer{
+    padding-top: 20px;
+    max-width: 340px;
+    min-width: 300px;
+    padding-left: 26px;
+    margin-left:auto;
+    margin-right: auto;
+}
+#clocklogo,#clocklogo img{
+    height: 22px;
+    width: 22px;
+    display: inline-block;
+}
+#historyrecord{
+    display: inline-block;
+    margin-bottom: 13px;
+    margin-right: 8px;
+    color: rgb(154, 154, 154);
+    font-size: 16px;
+}
+#bottomline{
+    background-color:  rgb(210, 210, 210);
+    width: 100%;
+    height: 1px;
+}
+#result{
+    /*display: inline-block;*/
+    /*margin-top: 8px;*/
+    color: rgb(64, 64, 64);
+    font-size: 13px;
+}
+#smallglasslogo,#smallglasslogo img{
+    width: 10px;
+    height:10px;
+    margin-right: 8px;
+    opacity: 0.6;
+    display: inline-block;
+}
+.red1 {
+    color: rgb(220, 106, 105);
+    display: inline-block;
+
+}
+.red2{
+    color: rgb(251, 116, 125);
+    display: inline-block;
+
+}
+.red3{
+    color: rgb(229, 186, 177);
+    display: inline-block;
+
+}
+#rightpage .number{
+    width: 18px;
+    text-align: right;
+}
+#secondshow{
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow-y: scroll;
+}
+#recentpage{
+    max-width: 340px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 15px;
+    /* height: 100%; */
+    /* overflow-y: scroll; */
+    padding-bottom: 100px;
+}
+#secondglasslogo{
+    width: 17px;
+    height: 17px;
+    margin-right: 15px;
+    opacity: 0.6;
+    vertical-align: top;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+.results_right{
+    display: inline-block;
+}
+.recent{
+    display: inline-block;
+    color: black;
+    font-size: 15px;
+    vertical-align: middle;
+    /* margin-top: 25px; */
+    margin-bottom: 5px;
+    width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.writer{
+    color: gray;
+    /* margin-left: 55px; */
+    font-size: 13px;
+    /* margin-top: 10px; */
+}
+.recentline{
+    background-color: gray;
+    /* width: 100%; */
+    height: 1px;
+    margin-top: 14px;
+    margin-left: 36px;
+    margin-bottom: 15px;
+    /* margin-bottom: 7px; */
+}
+
+span{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+.name{
+
+    width: 160px;
+
+
+}
+.smallglass{
+    height: 15px;
+    width: 15px;
+    margin-right: 10px;
+    float: left;
+    padding-top: 3px;
+    opacity:0.5;
+}
+
+.history_result{
+    margin-top: 16px;
+}
+.results{
+    white-space: nowrap;
+}
+#thirdshow{
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#noresult{
+    margin-top: 270px;
+    margin-left: 35px;
+    font-size: 14px;
+    color:darkgray;
+}
+.name{
+    margin-left: 5px;
+}
+.single_result{
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+}
+svg path,
+svg rect {
+    fill: rgb(80, 181, 237);
+}
+
+.loader {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+svg {
+    margin: auto;
+}
+
+

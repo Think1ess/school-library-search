@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="../static/css/common.css">
+    <style>
+
+        .book_info{
+            width: 83%;
+            margin: 26px auto 26px auto;
+        }
+        .book_name{
+            color: rgb(80,181,237);
+            font-size: 25px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            line-height: 36px;
+        }
+        .book_author{
+            font-size: 20px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        .book_publisher{
+            font-size: 10px;
+            color: #666666;
+            line-height: 14px;
+        }
+        .book_state{
+            width: 86%;
+            margin: 10px auto 20px auto;
+        }
+        .state {
+            font-size: 18px;
+            font-weight: bold;
+            color: rgb(80, 181, 237);
+            width: 32%;
+            text-align: center;
+            display: inline-block;
+        }
+        .state_list{
+            width: 100%;
+            height: 70px;
+            margin: 15px 0 15px 0;
+            border-radius: 6px;
+            background-color: rgb(230,230,230);
+        }
+        .state_content{
+            width: 32%;
+            line-height: 70px;
+            text-align: center;
+            display: inline-block;
+            color: #333333;
+            font-size: 13px;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            margin-left:3px;
+            margin-right: -4px;
+            overflow: hidden;
+            word-wrap:break-word
+        }
+        .order_state{
+            width: 86%;
+            height: 80px;
+            margin: 50px auto 15px auto;
+            border-radius: 6px;
+            background-color: rgb(230,230,230);
+        }
+        .order_yes{
+            width: 30%;
+            line-height: 80px;
+            text-align: center;
+            font-weight: bold;
+            display: inline-block;
+            color: #666666;
+            font-size: 15px;
+        }
+        .order_info{
+            width: 36%;
+            line-height: 80px;
+            text-align: center;
+            display: inline-block;
+            float: right;
+            font-size: 20px;
+            color: rgb(80, 181, 237);
+        }
+        svg path,
+        svg rect {
+            fill: rgb(80, 181, 237);
+        }
+
+        .loader {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        svg {
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="loader loader--style3">
+    <svg
+            width="40px" height="40px"
+            viewBox="0 0 50 50"
+    >
+        <path fill="#000"
+              d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+            <animateTransform attributeType="xml"
+                              attributeName="transform"
+                              type="rotate"
+                              from="0 25 25"
+                              to="360 25 25"
+                              dur="0.8s"
+                              repeatCount="indefinite"/>
+        </path>
+    </svg>
+</div>
+
+    <div class="main">
+        <div class="book_info">
+            <div class="book_name" id="eee"></div>
+            <div class="book_author"></div>
+            <div class="book_publisher" id="publisher"></div>
+            <div class="book_publisher" id="position"></div>
+        </div>
+
+        <div class="book_state" id="entity">
+            <div>
+                <div class="state" >校区</div>
+                <div class="state" >馆藏地</div>
+                <div class="state" >书刊状态</div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script type="application/xml" id="book_state">
+        <div class="state_list">
+            <div class="state_content">_location</div>
+            <div class="state_content">_campus</div>
+            <div class="state_content">_lend</div>
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        function setSearchObj(obj){
+            if(typeof obj!=="object"){
+                console.log("类型不符");
+                return false;
+            }
+            else{
+                var loc = location.href;
+                if(!location.search){
+                    loc+="?";
+                    for(var i in obj){
+                        loc+=i+"="+obj[i]+"&";
+                    }
+                    loc=loc.substring(0,loc.length-1);
+                }
+                else{
+                    console.log(1);
+                    for(var i in obj){
+                        loc+="&"+i+"="+obj[i];
+                    }
+                }
+            }
+            location.href = loc;
+        }
+
+        function getSearchObj() {
+            var loc = location.search;
+            if(loc){
+                loc=loc.substring(1);
+                var arr = loc.split(/[&=]/g);
+                var obj ={};
+                for(var i=0;i<arr.length;i=i+2){
+                    obj[arr[i]]= arr[i+1];
+                }
+            }
+            return obj;
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function(){
+
+            $(".main").hide();
+
+            function replaceAll(str,obj) {
+                var res = str;
+                for(var e in obj){
+                    res = res.replace(e,obj[e]);
+                }
+                return res;
+            }
+
+            var book_state = $("#book_state").text();
+            var bookid=getSearchObj().id;
+            console.log(bookid);
+            $.ajax({
+                url: "http://wx.hduin.club/api/token/auth",
+                method: "post",
+                data: {
+                    openID: "o6BVNt7owE4AyBFa4tKJNsUkRK8E"
+                },
+                timeout: 4000,
+                success: function (data) {
+                    var token = data.data.token;
+                    $.ajax({
+                        url: "http://wx.hduin.club/api/resource/library/book/bookinfo",
+                        method: "get",
+                        headers: {Authorization: "Bearer " + token},
+                        data: {bookID:bookid},
+                        success: function (data) {
+                            var list = data.data;
+                            if(!list)return;
+                            console.log(list);
+                            $("div.book_name").text(data.data.name);
+                            $("div.book_author").text(data.data.author);
+                            $("#publisher").text(data.data.publisher);
+                            $("#position").text(data.data.position);
+                            list.entity.forEach(function (state) {
+                                var lend =state.lend_or_not;
+                                console.log(lend);
+                                if(lend == false){
+                                    lend = "不可借";
+                                }
+                                else{
+                                    lend = "可借";
+                                }
+                                $("#entity").append(replaceAll(book_state,{
+                                    "_location": state.location,
+                                    "_campus": state.campus,
+                                    "_lend": lend
+                                }))
+                            })
+
+                        },
+                        error:function () {
+                            alert("服务器发生错误");
+                        },
+                        complete:function(){
+                            $(".loader").hide();
+                            $(".main").fadeIn(400);
+                        }
+                    })
+                }
+
+            })
+        });
+    </script>
+</body>
+</html>

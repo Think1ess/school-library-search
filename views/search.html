@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书馆搜索初始页面</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <script type="text/javascript" src="../static/js/jquery/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/search.css">
+</head>
+<body>
+    <div id="topbluearea">              <!--顶部蓝色搜索框-->
+        <div id="topcontainer">
+            <div id="backbutton"><img onclick="back()" src="../static/img/back_white.png" alt=""></div>
+            <div id="inputframe">
+                <input id="input" type="text" placeholder="搜索书名  书号">
+                <img onclick="search();store_history();" src="../static/img/search_blue.png">
+            </div>
+        </div>
+    </div>
+
+    <div id="firstshow">           <!--一开始显示的界面（未搜素之前）-->
+
+        <div id="middlewhitearea">
+            <div id="middlecontainer">
+                <div id="weekhot">本周最热</div>                 <!--本周最热-->
+                <div id="firelogo"><img src="../static/img/hot.png"></div>
+                <div id="topline"></div>
+                <div id="leftpage"></div>
+                <div id="rightpage"></div>
+
+        </div>
+        </div>
+        <div id="bottomwhitearea">                          <!--搜索历史记录-->
+            <div id="bottomcontainer">
+                <div id="historyrecord">历史记录</div>
+                <div id="clocklogo"><img src="../static/img/read_blue.png"> </div>
+                <div id="bottomline"></div>
+                <div id="smallglasslogo"> </div>
+                <div id="result"> </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="secondshow">                            <!--第二个显示的界面（搜索结果界面）-->
+        <div id="recentpage"></div>                    <!--打印搜索结果的地方-->
+    </div>
+
+
+</body>
+
+<script type="application/xml" id="reloader_code">
+    <div class="loader">
+        <svg
+    width="40px" height="40px"
+    viewBox="0 0 50 50"
+        >
+        <path fill="#000"
+    d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+        <animateTransform attributeType="xml"
+    attributeName="transform"
+    type="rotate"
+    from="0 25 25"
+    to="360 25 25"
+    dur="0.8s"
+    repeatCount="indefinite"/>
+        </path>
+        </svg>
+        </div>
+</script>
+
+<script type="text/javascript">
+
+    var token;
+    $ (function () {
+
+        sessionStorage.setItem("searching",false);
+        sessionStorage.setItem("page",1);
+        sessionStorage.setItem("active",true);
+        $(window).scroll(function () {
+            if(sessionStorage.getItem("searching")){
+                console.log(2);
+                var scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
+                var scrollHeight = $(document).height();   //当前页面的总高度
+                var clientHeight = $(this).height();    //当前可视的页面高度
+                if(scrollTop + clientHeight >= scrollHeight){   //距离顶部+当前高度 >=文档总高度 即代表滑动到底
+                    console.log(1);
+                    search_result(sessionStorage.getItem("page")-0,sessionStorage.getItem("active"));
+                }
+            }
+        });
+
+        $("#secondshow").hide();
+
+        color = [                            //本周最热的书目序号用到的不同颜色
+            {color:"\"red1\""},
+            {color:"\"red2\""},
+            {color:"\"red3\""},
+            {color:"\"number\""},
+            {color:"\"number\""}
+        ];
+
+
+        var hot_book = [];                          //从本地存储中拿出本周热门
+        for(var j=0;j<10;j++){
+            hot_book[j] = JSON.parse(localStorage.getItem('hotbook'+j));
+        }
+        for(var i=0;i<5;i++){
+
+            $("#leftpage").append("<div class=\"book\"><span class="+color[i].color+">"+(i+1)+"</span>"+"<span class='name'>"+hot_book[i]+"</span>"+"</div>");
+
+        }
+        for (i=5;i<10;i++){
+
+            $("#rightpage").append("<div class=\"book\"><span class=\"number\">"+(i+1)+"</span>"+"<span class='name'>"+hot_book[i]+"</span>"+"</div>");
+
+        }
+
+
+        if(!JSON.parse(localStorage.getItem('library_history')))                   //将本地存储的历史记录打印出来
+        {
+            var history_array = [];
+            localStorage.setItem('library_history',JSON.stringify(history_array));
+        }
+        else
+        {
+            var show_history = JSON.parse(localStorage.getItem('library_history'));
+            console.log("show history");
+            console.log(show_history.length);
+            for(var i=0;i<show_history.length;i++)
+            {
+                $("#result").append(
+                    "<div class='history_result'><img class='smallglass' src='../static/img/search_black.png'></div>"+
+                    "<div id=\"result\" onclick='history_search(\""+show_history[i]+"\")'>"+show_history[i]+ "</div></div>")
+            }
+        }
+
+        $("#recentpage").on("click",".results",function () {
+            var $this = $(this);
+            var bookid = $this.data("id");
+            location.href = "./details.html?id="+bookid;
+        })
+
+
+
+    });
+
+    function store_history() {                          //存储历史记录到本地
+        var history_array1 = JSON.parse(localStorage.getItem('library_history'));
+        var result = $("#input").val();
+        for(var i =0;i<10;i++)
+        {//判断搜索选项是否重复，若重复则不添加
+            if(result == history_array1[i] )
+                var flag = 1;
+        }
+        if(flag == 1)
+        {
+
+        }
+        else
+        {
+            history_array1.unshift(result);
+            console.log(history_array1);
+            if(history_array1.length>10)
+                history_array1.pop();
+        }
+
+        localStorage.setItem('library_history',JSON.stringify(history_array1));
+
+    }
+
+
+    function search_result(page,active) {                        //搜索结果
+        if(active==="false"){
+            return;
+        }
+        if(page===1){
+            $("#recentpage").empty();
+        }
+        $("#recentpage").append($("#reloader_code").html());
+        console.log(token);
+        var input = $("#input").val();
+
+        $.ajax({
+            url:"http://wx.hduin.club/api/resource/library/book/search",
+            method:"get",
+            headers: {
+                Authorization:"Bearer "+token
+                },
+            data:{
+                keyword:input,
+                page:page
+            },
+            timeout:8000,
+            success:function (data) {
+
+                if(!data.data){
+                    if(page===1){
+                        console.log("没有内容");                               //搜索出现的情况
+                    }
+                    else {
+                        $("#recentpage").append("已经到尽头了");
+                        sessionStorage.setItem("active","false");
+                    }
+                }
+                else{
+                    for(var x =0;x < data.data.length;x++)
+                    {
+                        $("#recentpage").append("<div class='results'data-id='"+data.data[x].id_book+"'"+"><img id=\"secondglasslogo\" src='../static/img/search_black.png'>"+
+                            "<div class='results_right'> <div class=\"recent\">" + data.data[x].name + "</div>" +
+                            "<div class=\"writer\">作者：" + data.data[x].author + "</div>" +"</div></div>"+
+                            "<div class=\"recentline\"></div>"
+                        )
+                    }
+                }
+            } ,
+            error:function(err){
+                // document.write("没有找到搜索结果");
+            },
+            complete:function () {
+                $(".loader").hide();
+                sessionStorage.setItem("page",sessionStorage.getItem("page")-(-1));
+                // $(window).scroll(function() {
+                //     console.log(1);
+                //     var scrollTop = $(this).scrollTop();
+                //     var scrollHeight = $(document).height();
+                //     var windowHeight = $(this).height();
+                //     console.log(scrollTop);
+                //     console.log(scrollHeight);
+                //     console.log(windowHeight);
+                //     if(scrollTop + windowHeight === scrollHeight){
+                //         console.log("scroll");
+                //
+                //         search_result(page+1,active)
+                //     }
+            }
+        });
+        console.log(input);
+    }
+
+
+    function search()                    //切换页面显示
+    {
+        $("#firstshow").hide();
+        $("#secondshow").show();
+        sessionStorage.setItem("searching","true");
+        sessionStorage.setItem("active","true");
+        sessionStorage.setItem("page",1);
+        search_result(1,"true");
+        $(window).scroll(function () {
+            if(sessionStorage.getItem("searching")){
+                console.log(2);
+                var scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
+                var scrollHeight = $(document).height();   //当前页面的总高度
+                var clientHeight = $(this).height();    //当前可视的页面高度
+                if(scrollTop + clientHeight >= scrollHeight){   //距离顶部+当前高度 >=文档总高度 即代表滑动到底
+                    console.log(1);
+                    search_result(sessionStorage.getItem("page")-0,sessionStorage.getItem("active"));
+                }
+            }
+        });
+    }
+    function history_search(str){
+        console.log(str);
+        $("#input").val(str);
+        search();
+    }
+    function back() {
+        window.location.reload();
+        $("#firstshow").show();
+        $("#secondshow").hide();
+        sessionStorage.setItem("searching","false");
+    };
+
+</script>
+</body>
+</html>

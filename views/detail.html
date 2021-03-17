@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>>
+    <title>Title</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container{
+            margin: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            /* width: 85%; */
+            width: 90%;
+            max-width: 340px;
+            min-width: 300px;
+            color: gray;
+        }
+        .top1{
+            font-size: 24px;
+            color: rgb(80,181,237);
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .editor {
+            font-size: 23px;
+            color: gray;
+            margin-top: 20px;
+        }
+        .chubanshe {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .suoshuhao{
+            margin-top: 5px;
+        }
+        .content{
+            margin: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 245px;
+        }
+        .banner{
+            width: 340px;
+        }
+        .banner1{
+            display: inline-block;
+            font-size: 21px;
+            font-weight: bold;
+            color: rgb(80,181,237);
+            /* justify-content: space-around; */
+            /* margin-left: 24px; */
+            width: 32%;
+            /* text-align: center; */
+            width: 30%;
+            /* margin-left: 6%; */
+            /* margin-right: 6%; */
+            text-align: center;
+        }
+
+        .place1 {
+            background-color: rgb(240,240,240);
+            border-style: none;
+            border-radius: 5px;
+            color: black;
+            height: 60px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 18px;
+        }
+        .place1_f,.place1_k,.place1_p{
+            display: inline-block;
+            vertical-align: middle;
+            /* width: 120px; */
+            width: 32%;
+            text-align: center;
+            height: 60px;
+            line-height: 30px;
+        }
+        .footer{
+            background-color: rgb(240,240,240);
+            border-radius: 5px;
+            color: black;
+            height: 80px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            float: bottom;
+            bottom: 10%;
+
+        }
+        .footer_qian{
+            display: inline-block;
+            margin-left: 8%;
+            height: 80px;
+            line-height: 80px;
+            font-weight: bolder;
+        }
+        .footer_hou {
+            display: inline-block;
+            margin-right: 10%;
+            float: right;
+            font-size: 25px;
+            height: 80px;
+            line-height: 80px;
+            color:rgb(80,181,237);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"  id="main">
+
+        <div class="top1">name</div>
+        <div class="editor">author</div>
+        <div class="chubanshe">publisher</div>
+        <div class="suoshuhao">position</div>
+    </div>
+
+    <div class="content" >
+        <div class="banner">
+            <div class="banner1" >校区</div>
+            <div class="banner1" >馆藏地</div>
+            <div class="banner1" >书刊状态</div>
+        </div>
+
+        <div class="footer">
+            <div class="footer_qian" id="count_lent" >22人等待</div>
+            <div class="footer_hou" >可预约</div>
+        </div>
+
+        <div class="place1">
+            <div class="place1_p"  >campus</div>
+            <div class="place1_f" >location</div>
+            <div class="place1_k" >lend_or_not</div>
+        </div>
+    </div>
+<!--       /* var bookinfo = {
+                    "id_book":"0000459460",
+                    "name":"jQuery开发完全技术宝典",
+                    "author":"朱育发, 岳阳编著",
+                    "publisher":"中国铁道出版社",
+                    "position":"TP312JA/2021",
+                    "count_lent":"17",
+                    "introduce":"暂无简介",
+                    "cover":"http://go.redhome.cc/none.png",
+                    "entity":[
+                    {
+                        "location":"自然书库（3F东）",
+                        "campus":"下沙总馆",
+                        "lend_or_not":true
+                    },
+                    {
+                        "location":"自然书库（3F东）",
+                        "campus":"下沙总馆",
+                        "lend_or_not":true
+                    },
+                    {
+                        "location":"自然书库（3F东）",
+                        "campus":"下沙总馆",
+                        "lend_or_not":false
+                    }
+                ]
+            }
+    */-->
+
+    <script type="text/javascript">
+
+        var book_id="0000459460";
+        function replaceAll(str,obj) {
+            var res = str;
+            for(var e in obj){
+                res = res.replace(e,obj[e]);
+            }
+            return res;
+        }
+
+        var book_code = $("#book_code").text();
+        $.ajax({
+                url: "http://wx.hduin.club/api/token/auth",
+                method: "POST",
+                data: {
+                    openID: "o6BVNt7owE4AyBFa4tKJNsUkRK8E"
+                },
+                timeout: 4000,
+                error:function(){
+                    console.log("error");
+                },
+                success: function (data) {
+                   // document.write(data.data.token)
+                    console.log(data);
+                    var token = data.data.token;
+                    $.ajax({
+                        url: "http://wx.hduin.club/api/resource/library/book/bookinfo",
+                        method: "GET",
+                        headers: {
+                            Authorization: "Bearer " + token
+                        },
+                        success: function (data) {
+                           var now_list = data.data.bookinfo;
+                           console.log(data);
+                           if(!now_list)return;
+                           console.log(now_list);
+                            now_list.forEach(function(book) {
+                                $("#main").append(replaceAll(book_code,{
+                                    //"name": name,
+                                    //"author": author,
+                                   // "publisher": publisher,
+                                    "campus": entity.campus,
+                                    "location":entity.location,
+                                    "lend_or_not":entity.lend_or_not,
+
+                                }));
+                            })
+
+
+
+                        },
+                    })
+                }
+
+            });
+
+    </script>
+</div>
+</body>
+</html>
